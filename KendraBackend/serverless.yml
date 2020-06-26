@@ -1,0 +1,41 @@
+service: kendrabackend
+
+provider:
+  name: aws
+  runtime: python3.8
+
+# you can overwrite defaults here
+  stage: dev
+  region: us-east-1
+  memorySize: 128
+
+custom:
+  lambda_admin: "arn:aws:iam::134588522078:role/lambda_admin"
+
+# you can add packaging information here
+package:
+  individually: true
+  exclude:
+    - ./**
+
+functions:
+  kendraTest:
+    handler: handler.hello
+    package:
+      include:
+        - ./handler.py
+    events:
+      - http:
+          path: /kendratest
+          method: get
+  kendraQuery:
+    role: ${self:custom.lambda_admin}
+    handler: kendraQuery.handler
+    package:
+      include:
+        - ./kendraQuery.py
+    events:
+      - http:
+          path: /kendraquery
+          method: get
+
