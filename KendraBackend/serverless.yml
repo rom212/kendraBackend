@@ -12,8 +12,9 @@ provider:
 custom:
   lambda_admin: "arn:aws:iam::134588522078:role/lambda_admin"
   kendra_index_id : "61f14cdb-319a-4f91-87e8-087508f57895"
+  user_pool_arn : "arn:aws:cognito-idp:us-east-1:134588522078:userpool/us-east-1_23Z2YmLff"
 
-# you can add packaging information here
+# you can add packaging information here 
 package:
   individually: true
   exclude:
@@ -41,4 +42,7 @@ functions:
       - http:
           path: /kendraquery
           method: get
+          cors: true
+          authorizer:
+            arn: ${self:custom.user_pool_arn}
 
